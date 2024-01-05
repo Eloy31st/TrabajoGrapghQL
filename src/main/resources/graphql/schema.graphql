@@ -1,0 +1,41 @@
+type Categoria{
+    id: ID!
+    nombre: String!
+    libros: [Libro!]!
+}
+
+type Libro{
+    id: ID!
+    titulo: String!
+    autor: Autor!
+    categoria: Categoria!
+}
+
+type Autor{
+    id: ID!
+    nombre: String!
+    libros: [Libro!]!
+}
+
+type Query {
+    buscarLibrosPorTitulo(titulo: String!): [Libro!]!
+    buscarLibrosPorAutor(nombre: String!): [Libro!]!
+    buscarLibrosPorCategoria(nombre: String!): [Libro!]!
+}
+
+type Mutation {
+
+    agregarLibro(titulo: String!, autor: String!, categoria: String!): Libro!
+    editarLibro(id: ID!, titulo: String, autor: String, categoria: String): Libro!
+    eliminarLibro(id: ID!): Boolean!
+
+
+    agregarAutor(nombre: String!): Autor!
+    editarAutor(id: ID!, nombre: String): Autor!
+    eliminarAutor(id: ID!): Boolean!
+
+
+    agregarCategoria(nombre: String!): Categoria!
+    editarCategoria(id: ID!, nombre: String): Categoria!
+    eliminarCategoria(id: ID!): Boolean!
+}

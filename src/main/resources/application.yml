@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:GraphQL
+    username: postgres
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+  graphql:
+    graphiql:
+      path: /graphiql
+      enabled: true
+
+server:
+  port: 8080
+
