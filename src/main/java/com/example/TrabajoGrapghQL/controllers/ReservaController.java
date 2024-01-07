@@ -38,6 +38,13 @@ public class ReservaController {
     }
 
     @MutationMapping
+    Reserva editarReserva(@Argument Long id, @Argument Long libroID) {
+        Reserva reserva = reservaRepository.findById(id).orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+        if (libroID != null) reserva.setLibro(libroRepository.findById(libroID).orElseThrow(() -> new RuntimeException("Libro no encontrado")));
+        return reservaRepository.save(reserva);
+    }
+
+    @MutationMapping
     Boolean eliminarReserva(@Argument Long id) {
         if (reservaRepository.existsById(id)) {
             reservaRepository.deleteById(id);

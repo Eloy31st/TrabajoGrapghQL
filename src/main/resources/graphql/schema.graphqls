@@ -4,6 +4,11 @@ type Categoria {
     libros: [Libro!]!
 }
 
+type Reserva{
+    id: ID!
+    libro: Libro!
+}
+
 type Libro {
     id: ID!
     titulo: String!
@@ -21,9 +26,11 @@ type Query {
     listarCategorias: [Categoria]
     listarAutores: [Autor]
     listarLibros: [Libro]
+    listarReservas: [Reserva]
     buscarLibrosPorTitulo(titulo: String!): [Libro!]!
     buscarLibrosPorAutor(autorID: ID!): [Libro!]!
     buscarLibrosPorCategoria(categoriaID: ID!): [Libro!]!
+    buscarReservaPorLibro(libroID: ID!): [Reserva!]!
 }
 
 type Mutation {
@@ -41,4 +48,8 @@ type Mutation {
     agregarCategoria(nombre: String!): Categoria!
     editarCategoria(id: ID!, nombre: String): Categoria!
     eliminarCategoria(id: ID!): Boolean!
+
+    agregarReserva(libroID: ID!): Reserva!
+    editarReserva(id: ID!, libroID: ID!): Reserva!
+    eliminarReserva(id: ID!): Boolean!
 }
