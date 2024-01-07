@@ -35,15 +35,35 @@ public class LibroController {
     }
 
     @QueryMapping
-    Iterable<Libro> buscarLibrosPorAutor(@Argument Long autorId) {
-        Autor autor = autorRepository.findById(autorId).orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+    Iterable<Libro> buscarLibrosPorAutor(@Argument Long autorID) {
+        Autor autor = autorRepository.findById(autorID).orElseThrow(() -> new RuntimeException("Autor no encontrado"));
         return libroRepository.findByAutor(autor);
     }
 
     @QueryMapping
-    Iterable<Libro> buscarLibrosPorCategoria(@Argument Long categoriaId) {
-        Categoria categoria = categoriaRepository.findById(categoriaId).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+    Iterable<Libro> buscarLibrosPorCategoria(@Argument Long categoriaID) {
+        Categoria categoria = categoriaRepository.findById(categoriaID).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
         return libroRepository.findByCategoria(categoria);
+    }
+
+    @MutationMapping
+    Libro agregarLibro(@Argument String titulo, @Argument Long autorID, @Argument Long categoriaID) {
+        Libro libro = new Libro();
+        libro.setTitulo(titulo);
+        Autor autor = autorRepository.findById(autorID).orElseThrow(() -> new RuntimeException("Autor no encontrado"));
+        Categoria categoria = categoriaRepository.findById(categoriaID).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+        libro.setAutor(autor);
+        libro.setCategoria(categoria);
+        return libroRepository.save(libro);
+    }
+
+    @MutationMapping
+    Libro editarLibro(@Argument Long id, @Argument String titulo, @Argument Long autorID, @Argument Long categoriaID) {
+        Libro libro = libroRepository.findById(id).orElseThrow(() -> new RuntimeException("Libro no encontrado"));
+        if (titulo != null) libro.setTitulo(titulo);
+        if (autorID != null) libro.setAutor(autorRepository.findById(autorID).orElseThrow(() -> new RuntimeException("Autor no encontrado")));
+        if (categoriaID != null) libro.setCategoria(categoriaRepository.findById(categoriaID).orElseThrow(() -> new RuntimeException("Categoria no encontrada")));
+        return libroRepository.save(libro);
     }
 
 

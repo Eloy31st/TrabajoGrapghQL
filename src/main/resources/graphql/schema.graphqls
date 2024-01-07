@@ -18,6 +18,8 @@ type Autor {
 }
 
 type Query {
+    listarCategorias: [Categoria]
+    listarAutores: [Autor]
     listarLibros: [Libro]
     buscarLibrosPorTitulo(titulo: String!): [Libro!]!
     buscarLibrosPorAutor(autorID: ID!): [Libro!]!
@@ -26,8 +28,8 @@ type Query {
 
 type Mutation {
 
-    agregarLibro(titulo: String!, autor: String!, categoria: String!): Libro!
-    editarLibro(id: ID!, titulo: String, autor: String, categoria: String): Libro!
+    agregarLibro(titulo: String!, autorID: ID!, categoriaID: ID!): Libro!
+    editarLibro(id: ID!, titulo: String, autorID: ID!, categoriaID: ID!): Libro!
     eliminarLibro(id: ID!): Boolean!
 
 
