@@ -1,26 +1,27 @@
-type Categoria{
+type Categoria {
     id: ID!
     nombre: String!
     libros: [Libro!]!
 }
 
-type Libro{
+type Libro {
     id: ID!
     titulo: String!
     autor: Autor!
     categoria: Categoria!
 }
 
-type Autor{
+type Autor {
     id: ID!
     nombre: String!
     libros: [Libro!]!
 }
 
 type Query {
+    listarLibros: [Libro]
     buscarLibrosPorTitulo(titulo: String!): [Libro!]!
-    buscarLibrosPorAutor(nombre: String!): [Libro!]!
-    buscarLibrosPorCategoria(nombre: String!): [Libro!]!
+    buscarLibrosPorAutor(autorID: ID!): [Libro!]!
+    buscarLibrosPorCategoria(categoriaID: ID!): [Libro!]!
 }
 
 type Mutation {
