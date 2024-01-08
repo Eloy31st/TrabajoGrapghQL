@@ -25,29 +25,29 @@ public class LibroController {
     }
 
     @QueryMapping
-    Iterable<Libro> listarLibros() {
+    public Iterable<Libro> listarLibros() {
         return libroRepository.findAll();
     }
 
     @QueryMapping
-    Iterable<Libro> buscarLibrosPorTitulo(@Argument String titulo) {
+    public Iterable<Libro> buscarLibrosPorTitulo(@Argument String titulo) {
         return libroRepository.findByTitulo(titulo);
     }
 
     @QueryMapping
-    Iterable<Libro> buscarLibrosPorAutor(@Argument Long autorID) {
+    public Iterable<Libro> buscarLibrosPorAutor(@Argument Long autorID) {
         Autor autor = autorRepository.findById(autorID).orElseThrow(() -> new RuntimeException("Autor no encontrado"));
         return libroRepository.findByAutor(autor);
     }
 
     @QueryMapping
-    Iterable<Libro> buscarLibrosPorCategoria(@Argument Long categoriaID) {
+    public Iterable<Libro> buscarLibrosPorCategoria(@Argument Long categoriaID) {
         Categoria categoria = categoriaRepository.findById(categoriaID).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
         return libroRepository.findByCategoria(categoria);
     }
 
     @MutationMapping
-    Libro agregarLibro(@Argument String titulo, @Argument Long autorID, @Argument Long categoriaID) {
+    public Libro agregarLibro(@Argument String titulo, @Argument Long autorID, @Argument Long categoriaID) {
         Libro libro = new Libro();
         libro.setTitulo(titulo);
         Autor autor = autorRepository.findById(autorID).orElseThrow(() -> new RuntimeException("Autor no encontrado"));
@@ -58,7 +58,7 @@ public class LibroController {
     }
 
     @MutationMapping
-    Libro editarLibro(@Argument Long id, @Argument String titulo, @Argument Long autorID, @Argument Long categoriaID) {
+    public Libro editarLibro(@Argument Long id, @Argument String titulo, @Argument Long autorID, @Argument Long categoriaID) {
         Libro libro = libroRepository.findById(id).orElseThrow(() -> new RuntimeException("Libro no encontrado"));
         if (titulo != null) libro.setTitulo(titulo);
         if (autorID != null) libro.setAutor(autorRepository.findById(autorID).orElseThrow(() -> new RuntimeException("Autor no encontrado")));
@@ -68,7 +68,7 @@ public class LibroController {
 
 
     @MutationMapping
-    Boolean eliminarLibro(@Argument Long id) {
+    public Boolean eliminarLibro(@Argument Long id) {
         if (libroRepository.existsById(id)) {
             libroRepository.deleteById(id);
             return true;
