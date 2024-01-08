@@ -20,32 +20,32 @@ public class ReservaController {
     }
 
     @QueryMapping
-    Iterable<Reserva> buscarReservaPorLibro(@Argument Long libroID) {
+    public Iterable<Reserva> buscarReservaPorLibro(@Argument Long libroID) {
         Libro libro = libroRepository.findById(libroID).orElseThrow(() -> new RuntimeException("Libro no encontrado"));
         return reservaRepository.findByLibro(libro);
     }
 
     @QueryMapping
-    Iterable<Reserva> listarReservas() {
+    public Iterable<Reserva> listarReservas() {
         return reservaRepository.findAll();
     }
 
     @MutationMapping
-    Reserva agregarReserva(@Argument Long libroID) {
+    public Reserva agregarReserva(@Argument Long libroID) {
         Reserva reserva = new Reserva();
         reserva.setLibro(libroRepository.findById(libroID).orElseThrow(() -> new RuntimeException("Libro no encontrado")));
         return reservaRepository.save(reserva);
     }
 
     @MutationMapping
-    Reserva editarReserva(@Argument Long id, @Argument Long libroID) {
+    public Reserva editarReserva(@Argument Long id, @Argument Long libroID) {
         Reserva reserva = reservaRepository.findById(id).orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
         if (libroID != null) reserva.setLibro(libroRepository.findById(libroID).orElseThrow(() -> new RuntimeException("Libro no encontrado")));
         return reservaRepository.save(reserva);
     }
 
     @MutationMapping
-    Boolean eliminarReserva(@Argument Long id) {
+    public Boolean eliminarReserva(@Argument Long id) {
         if (reservaRepository.existsById(id)) {
             reservaRepository.deleteById(id);
             return true;
