@@ -18,26 +18,26 @@ public class CategoriaController {
     }
 
     @QueryMapping
-    Iterable<Categoria> listarCategorias() {
+    public Iterable<Categoria> listarCategorias() {
         return categoriaRepository.findAll();
     }
 
     @MutationMapping
-    Categoria agregarCategoria(@Argument String nombre) {
+    public Categoria agregarCategoria(@Argument String nombre) {
         Categoria categoria = new Categoria();
         categoria.setNombre(nombre);
         return categoriaRepository.save(categoria);
     }
 
     @MutationMapping
-    Categoria editarCategoria(@Argument Long id, @Argument String nombre) {
+    public Categoria editarCategoria(@Argument Long id, @Argument String nombre) {
         Categoria categoria = categoriaRepository.findById(id).orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
         if (nombre != null) categoria.setNombre(nombre);
         return categoriaRepository.save(categoria);
     }
 
     @MutationMapping
-    Boolean eliminarCategoria(@Argument Long id) {
+    public Boolean eliminarCategoria(@Argument Long id) {
         if (categoriaRepository.existsById(id)) {
             categoriaRepository.deleteById(id);
             return true;
