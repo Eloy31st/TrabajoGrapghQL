@@ -1,87 +1,52 @@
 package com.example.TrabajoGrapghQL.Test;
 
-import com.example.TrabajoGrapghQL.controllers.AutorController;
-import com.example.TrabajoGrapghQL.domain.Autor;
-import com.example.TrabajoGrapghQL.repositories.AutorRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.graphql.spring.boot.test.GraphQLResponse;
+import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.io.IOException;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+@GraphQlTest
+public class AutorControllerEndToEndTest {
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class AutorControllerEndToEndTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private AutorRepository autorRepository;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+    private GraphQLTestTemplate graphQLTestTemplate;
 
     @Test
-    void testListarAutores() throws Exception {
-        AutorRepository autorRepository = mock(AutorRepository.class);
-        when(autorRepository.findAll()).thenReturn(Collections.emptyList());
-
-        AutorController autorController = new AutorController(autorRepository);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/graphql")
-                        .content("{\"query\":\"{ listarAutores { id nombre } }\"}")
-                        .contentType("application/json"))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentType("application/json"))
-                        .andExpect(jsonPath("$.data.listarAutores").isArray())
-                        .andExpect(jsonPath("$.data.listarAutores").isEmpty());
+    public void listarAutores() throws IOException {
+        String query = "{ listarAutores { id nombre } }";
+        GraphQLResponse response = graphQLTestTemplate.postForResource("graphql/listarAutores.graphql");
+        Assertions.assertNotNull(response);
+        Assertions.assertTrue(response.isOk());
+        Assertions.assertEquals(1, response.get("$.data.listarAutores.length", Integer.class));
     }
 
     @Test
-    void testAgregarAutor() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/graphql")
-                        .content("{\"query\":\"mutation { agregarAutor(nombre: \\\"Nuevo Autor\\\") { id nombre } }\"}")
-                        .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.data.agregarAutor.id").isNumber())
-                .andExpect(jsonPath("$.data.agregarAutor.nombre").value("Nuevo Autor"));
+    public void agregarAutor() throws IOException {
+        String query = "mutation { agregarAutor(nombre: \"Autor 1\") { id nombre } }";
+        GraphQLResponse response = graphQLTestTemplate.postForResource("graphql/agregarAutor.graphql");
+        Assertions.assertNotNull(response);
+        Assertions.assertTrue(response.isOk());
+        Assertions.assertEquals("Autor 1", response.get("$.data.agregarAutor.nombre", String.class));
     }
 
     @Test
-    void testEditarAutor() throws Exception {
-        when(autorRepository.findById(any())).thenReturn(Optional.of(new Autor()));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/graphql")
-                        .content("{\"query\":\"mutation { editarAutor(id: 1, nombre: \\\"Nuevo Nombre\\\") { id nombre } }\"}")
-                        .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.data.editarAutor.id").isNumber())
-                .andExpect(jsonPath("$.data.editarAutor.nombre").value("Nuevo Nombre"));
+    public void editarAutor() throws IOException {
+        String query = "mutation { editarAutor(id: 1, nombre: \"Autor 2\") { id nombre } }";
+        GraphQLResponse response = graphQLTestTemplate.postForResource("graphql/editarAutor.graphql");
+        Assertions.assertNotNull(response);
+        Assertions.assertTrue(response.isOk());
+        Assertions.assertEquals("Autor 2", response.get("$.data.editarAutor.nombre", String.class));
     }
 
     @Test
-    void testEliminarAutor() throws Exception {
-        when(autorRepository.existsById(any())).thenReturn(true);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/graphql")
-                        .content("{\"query\":\"mutation { eliminarAutor(id: 1) }\"}")
-                        .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.data.eliminarAutor").value(true));
+    public void eliminarAutor() throws IOException {
+        String query = "mutation { eliminarAutor(id: 1) }";
+        GraphQLResponse response = graphQLTestTemplate.postForResource("graphql/eliminarAutor.graphql");
+        Assertions.assertNotNull(response);
+        Assertions.assertTrue(response.isOk());
+        Assertions.assertEquals(true, response.get("$.data.eliminarAutor", Boolean.class));
     }
 }
-

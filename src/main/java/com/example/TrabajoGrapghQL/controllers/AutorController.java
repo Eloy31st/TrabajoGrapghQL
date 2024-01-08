@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class AutorController {
-
     private final AutorRepository autorRepository;
 
     public AutorController(AutorRepository autorRepository) {
