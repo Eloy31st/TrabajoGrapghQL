@@ -1,15 +1,17 @@
 package com.example.TrabajoGrapghQL.Test;
 
 import com.graphql.spring.boot.test.GraphQLResponse;
+import com.graphql.spring.boot.test.GraphQLTest;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest;
+
+
 
 import java.io.IOException;
 
-@GraphQlTest
+@GraphQLTest
 public class AutorControllerEndToEndTest {
 
     private GraphQLTestTemplate graphQLTestTemplate;
