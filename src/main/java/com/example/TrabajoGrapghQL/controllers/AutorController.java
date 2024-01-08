@@ -17,26 +17,26 @@ public class AutorController {
     }
 
     @QueryMapping
-    Iterable<Autor> listarAutores() {
+    public Iterable<Autor> listarAutores() {
         return autorRepository.findAll();
     }
 
     @MutationMapping
-    Autor agregarAutor(@Argument String nombre) {
+    public Autor agregarAutor(@Argument String nombre) {
         Autor autor = new Autor();
         autor.setNombre(nombre);
         return autorRepository.save(autor);
     }
 
     @MutationMapping
-    Autor editarAutor(@Argument Long id, @Argument String nombre) {
+    public Autor editarAutor(@Argument Long id, @Argument String nombre) {
         Autor autor = autorRepository.findById(id).orElseThrow(() -> new RuntimeException("Autor no encontrado"));
         if (nombre != null) autor.setNombre(nombre);
         return autorRepository.save(autor);
     }
 
     @MutationMapping
-    Boolean eliminarAutor(@Argument Long id) {
+    public Boolean eliminarAutor(@Argument Long id) {
         if (autorRepository.existsById(id)) {
             autorRepository.deleteById(id);
             return true;
